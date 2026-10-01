@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circles</title>
+  <link rel="stylesheet" href="imageindex.css">
+</head>
+<body>
+  <main class="page">
+    <!-- ring of circles, filled in by the script below -->
+    <div class="ring" id="ring"></div>
+
+    <nav class="nav">
+      <a href="imageindex.html">Image Index</a>
+      <a href="imageindex.html">Circles</a>
+      <a href="readmore.html" class="faded">Read More</a>
+    </nav>
+  </main>
+
+<script>
+// Number of circles in the ring.
+const CIRCLE_COUNT = 50;
+
+// Add photo paths here later, e.g. ["images/01.jpg", "images/02.jpg", ...].
+// Circles without an image stay solid black at low opacity.
+const IMAGES = [];
+
+const ring = document.getElementById("ring");
+
+// circle width is 5% of the ring, so centers sit 2.5% in from the edge
+const radius = 50 - 2.5;
+
+for (let i = 0; i < CIRCLE_COUNT; i++) {
+  // start at the top and go clockwise
+  const angle = (i / CIRCLE_COUNT) * 2 * Math.PI - Math.PI / 2;
+
+  const circle = document.createElement("div");
+  circle.className = "circle";
+  circle.style.setProperty("--x", 50 + radius * Math.cos(angle) + "%");
+  circle.style.setProperty("--y", 50 + radius * Math.sin(angle) + "%");
+
+  if (IMAGES[i]) {
+    circle.classList.add("has-image");
+    circle.style.backgroundImage = `url("${IMAGES[i]}")`;
+  }
+
+  ring.appendChild(circle);
+}
+
+// Split the ring into pie slices, one per circle. When the cursor is inside
+// the ring, the circle whose slice it falls in gets the "active" class.
+const circles = ring.querySelectorAll(".circle");
+const step = (2 * Math.PI) / CIRCLE_COUNT;
+let active = null;
+
+function setActive(circle) {
+  if (circle === active) return;
+  if (active) active.classList.remove("active");
+  if (circle) circle.classList.add("active");
+  active = circle;
+}
+
+// Which circle's slice is the cursor in? Returns null outside the ring.
+function circleAt(e) {
+  const rect = ring.getBoundingClientRect();
+  const dx = e.clientX - (rect.left + rect.width / 2);
+  const dy = e.clientY - (rect.top + rect.height / 2);
+
+  if (Math.hypot(dx, dy) > rect.width / 2) return null;
+
+  // angle measured clockwise from the top, matching how the circles are placed
+  let angle = Math.atan2(dy, dx) + Math.PI / 2;
+  if (angle < 0) angle += 2 * Math.PI;
+
+  return circles[Math.round(angle / step) % CIRCLE_COUNT];
+}
+
+document.addEventListener("mousemove", (e) => setActive(circleAt(e)));
+document.addEventListener("mouseleave", () => setActive(null));
+
+// Clicking a slice moves its circle to the middle and enlarges it.
+// Clicking the open circle, outside the ring, or pressing Escape puts it back.
+const page = document.querySelector(".page");
+let open = null;
+
+function setOpen(circle) {
+  if (open) open.classList.remove("open");
+  if (circle) circle.classList.add("open");
+  page.classList.toggle("is-open", !!circle);
+  open = circle;
+}
+
+document.addEventListener("click", (e) => {
+  // let the nav links work as normal
+  if (e.target.closest?.("a")) return;
+
+  if (open && e.target === open) {
+    setOpen(null);
+    return;
+  }
+
+  const circle = circleAt(e);
+  setOpen(circle === open ? null : circle);
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") setOpen(null);
+});
+</script>
+</body>
+</html>
