@@ -16,15 +16,34 @@
       <a href="index.html">Circles</a>
       <a href="readmore.html" class="faded">Read More</a>
     </nav>
+
+    <!-- caption shown in the middle when a circle with a photo is hovered -->
+    <p class="caption" id="caption"><span class="fig"></span><span class="title"></span></p>
   </main>
 
 <script>
 // Number of circles in the ring.
 const CIRCLE_COUNT = 50;
 
-// Add photo paths here later, e.g. ["images/01.jpg", "images/02.jpg", ...].
-// Circles without an image stay solid black at low opacity.
-const IMAGES = [];
+// Photos, placed clockwise starting from the top.
+// Circles past the end of this list stay solid black at low opacity.
+const IMAGES = [
+  { src: "Fig. 01 Pottery Wheel.jpg",              fig: "Fig.01", title: "Pottery Wheel" },
+  { src: "Fig. 02 Wooden Wheel with Iron Rim.jpg", fig: "Fig.02", title: "Wooden Wheel with Iron Rim" },
+  { src: "Fig. 03 Modern Bicyle Wheel.jpeg",       fig: "Fig.03", title: "Modern Bicycle Wheel" },
+  { src: "Fig. 04 Modern bus Wheel.jpg",           fig: "Fig.04", title: "Modern Bus Wheel" },
+  { src: "Fig. 05 Modern Skating Wheel.jpg",       fig: "Fig.05", title: "Modern Skating Wheel" },
+  { src: "Fig. 06 Modern Cart Wheel.jpeg",         fig: "Fig.06", title: "Modern Cart Wheel" },
+  { src: "Fig. 07 Thick Car Wheel.jpeg",           fig: "Fig.07", title: "Thick Car Wheel" },
+  { src: "Fig. 08 Mitsubishi Car Wheel.jpeg",      fig: "Fig.08", title: "Mitsubishi Car Wheel" },
+  { src: "Fig 09 Toyota Car Wheel.jpeg",           fig: "Fig.09", title: "Toyota Car Wheel" },
+  { src: "Fig. 10 Helo HE841 Car Wheel.jpg",       fig: "Fig.10", title: "Helo HE841 Car Wheel" },
+  { src: "Fig.11 Bicycle Wheel.jpeg",              fig: "Fig.11", title: "Bicycle Wheel" },
+  { src: "Fig. 12 Garbage Wheel.jpeg",             fig: "Fig.12", title: "Garbage Wheel" },
+  { src: "Fig. 13 Motor Bike Wheel.jpeg",          fig: "Fig.13", title: "Motor Bike Wheel" },
+  { src: "Fig. 14 Abandoned Cart Wheel.jpeg",      fig: "Fig.14", title: "Abandoned Cart Wheel" },
+];
+const IMAGE_FOLDER = "circle images/";
 
 const ring = document.getElementById("ring");
 
@@ -40,9 +59,12 @@ for (let i = 0; i < CIRCLE_COUNT; i++) {
   circle.style.setProperty("--x", 50 + radius * Math.cos(angle) + "%");
   circle.style.setProperty("--y", 50 + radius * Math.sin(angle) + "%");
 
-  if (IMAGES[i]) {
+  const image = IMAGES[i];
+  if (image) {
     circle.classList.add("has-image");
-    circle.style.backgroundImage = `url("${IMAGES[i]}")`;
+    circle.style.backgroundImage = `url("${encodeURI(IMAGE_FOLDER + image.src)}")`;
+    circle.dataset.fig = image.fig;
+    circle.dataset.title = image.title;
   }
 
   ring.appendChild(circle);
@@ -52,13 +74,27 @@ for (let i = 0; i < CIRCLE_COUNT; i++) {
 // the ring, the circle whose slice it falls in gets the "active" class.
 const circles = ring.querySelectorAll(".circle");
 const step = (2 * Math.PI) / CIRCLE_COUNT;
+const page = document.querySelector(".page");
+const caption = document.getElementById("caption");
 let active = null;
+let open = null;
 
 function setActive(circle) {
   if (circle === active) return;
   if (active) active.classList.remove("active");
   if (circle) circle.classList.add("active");
   active = circle;
+  updateCaption();
+}
+
+// Swap CIRCLES for the hovered photo's caption (not while a circle is open).
+function updateCaption() {
+  const show = active && active.dataset.title && !open;
+  if (show) {
+    caption.querySelector(".fig").textContent = active.dataset.fig;
+    caption.querySelector(".title").textContent = active.dataset.title;
+  }
+  page.classList.toggle("is-captioned", !!show);
 }
 
 // Which circle's slice is the cursor in? Returns null outside the ring.
@@ -81,14 +117,12 @@ document.addEventListener("mouseleave", () => setActive(null));
 
 // Clicking a slice moves its circle to the middle and enlarges it.
 // Clicking the open circle, outside the ring, or pressing Escape puts it back.
-const page = document.querySelector(".page");
-let open = null;
-
 function setOpen(circle) {
   if (open) open.classList.remove("open");
   if (circle) circle.classList.add("open");
   page.classList.toggle("is-open", !!circle);
   open = circle;
+  updateCaption();
 }
 
 document.addEventListener("click", (e) => {
