@@ -8,139 +8,74 @@
 </head>
 <body>
   <main class="page">
-    <!-- ring of circles, filled in by the script below -->
-    <div class="ring" id="ring"></div>
+
+    <!--
+      The ring: 50 slices, placed clockwise from the top. --i is each slice's position (0–49).
+      Slices with a photo are links: clicking one opens it in the middle.
+      To add a photo, turn the next <div> into an <a> like the ones above it.
+    -->
+    <div class="ring">
+      <a class="slice" id="f01" href="#f01" style="--i: 0;  --img: url(images/01.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.01</span>Pottery Wheel</span></a>
+      <a class="slice" id="f02" href="#f02" style="--i: 1;  --img: url(images/02.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.02</span>Wooden Wheel with Iron Rim</span></a>
+      <a class="slice" id="f03" href="#f03" style="--i: 2;  --img: url(images/03.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.03</span>Modern Bicycle Wheel</span></a>
+      <a class="slice" id="f04" href="#f04" style="--i: 3;  --img: url(images/04.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.04</span>Modern Bus Wheel</span></a>
+      <a class="slice" id="f05" href="#f05" style="--i: 4;  --img: url(images/05.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.05</span>Modern Skating Wheel</span></a>
+      <a class="slice" id="f06" href="#f06" style="--i: 5;  --img: url(images/06.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.06</span>Modern Cart Wheel</span></a>
+      <a class="slice" id="f07" href="#f07" style="--i: 6;  --img: url(images/07.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.07</span>Thick Car Wheel</span></a>
+      <a class="slice" id="f08" href="#f08" style="--i: 7;  --img: url(images/08.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.08</span>Mitsubishi Car Wheel</span></a>
+      <a class="slice" id="f09" href="#f09" style="--i: 8;  --img: url(images/09.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.09</span>Toyota Car Wheel</span></a>
+      <a class="slice" id="f10" href="#f10" style="--i: 9;  --img: url(images/10.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.10</span>Helo HE841 Car Wheel</span></a>
+      <a class="slice" id="f11" href="#f11" style="--i: 10; --img: url(images/11.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.11</span>Bicycle Wheel</span></a>
+      <a class="slice" id="f12" href="#f12" style="--i: 11; --img: url(images/12.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.12</span>Garbage Wheel</span></a>
+      <a class="slice" id="f13" href="#f13" style="--i: 12; --img: url(images/13.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.13</span>Motor Bike Wheel</span></a>
+      <a class="slice" id="f14" href="#f14" style="--i: 13; --img: url(images/14.jpg)"><span class="hit"></span><span class="dot"></span><span class="caption"><span class="fig">Fig.14</span>Abandoned Cart Wheel</span></a>
+      <div class="slice" style="--i: 14"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 15"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 16"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 17"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 18"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 19"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 20"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 21"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 22"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 23"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 24"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 25"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 26"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 27"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 28"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 29"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 30"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 31"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 32"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 33"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 34"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 35"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 36"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 37"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 38"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 39"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 40"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 41"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 42"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 43"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 44"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 45"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 46"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 47"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 48"><span class="hit"></span><span class="dot"></span></div>
+      <div class="slice" style="--i: 49"><span class="hit"></span><span class="dot"></span></div>
+    </div>
+
+    <!-- covers the page while a photo is open; clicking anywhere closes it -->
+    <a class="close" href="#" aria-label="Close"></a>
 
     <nav class="nav">
       <a href="index.html">Image Index</a>
-      <a href="index.html">Circles</a>
+      <a href="index.html" class="home">Circles</a>
       <a href="readmore.html" class="faded">Read More</a>
     </nav>
 
-    <!-- caption shown in the middle when a circle with a photo is hovered -->
-    <p class="caption" id="caption"><span class="fig"></span><span class="title"></span></p>
   </main>
-
-<script>
-// Number of circles in the ring.
-const CIRCLE_COUNT = 50;
-
-// Photos, placed clockwise starting from the top.
-// Circles past the end of this list stay solid black at low opacity.
-const IMAGES = [
-  { src: "Fig. 01 Pottery Wheel.jpg",              fig: "Fig.01", title: "Pottery Wheel" },
-  { src: "Fig. 02 Wooden Wheel with Iron Rim.jpg", fig: "Fig.02", title: "Wooden Wheel with Iron Rim" },
-  { src: "Fig. 03 Modern Bicyle Wheel.jpeg",       fig: "Fig.03", title: "Modern Bicycle Wheel" },
-  { src: "Fig. 04 Modern bus Wheel.jpg",           fig: "Fig.04", title: "Modern Bus Wheel" },
-  { src: "Fig. 05 Modern Skating Wheel.jpg",       fig: "Fig.05", title: "Modern Skating Wheel" },
-  { src: "Fig. 06 Modern Cart Wheel.jpeg",         fig: "Fig.06", title: "Modern Cart Wheel" },
-  { src: "Fig. 07 Thick Car Wheel.jpeg",           fig: "Fig.07", title: "Thick Car Wheel" },
-  { src: "Fig. 08 Mitsubishi Car Wheel.jpeg",      fig: "Fig.08", title: "Mitsubishi Car Wheel" },
-  { src: "Fig 09 Toyota Car Wheel.jpeg",           fig: "Fig.09", title: "Toyota Car Wheel" },
-  { src: "Fig. 10 Helo HE841 Car Wheel.jpg",       fig: "Fig.10", title: "Helo HE841 Car Wheel" },
-  { src: "Fig.11 Bicycle Wheel.jpeg",              fig: "Fig.11", title: "Bicycle Wheel" },
-  { src: "Fig. 12 Garbage Wheel.jpeg",             fig: "Fig.12", title: "Garbage Wheel" },
-  { src: "Fig. 13 Motor Bike Wheel.jpeg",          fig: "Fig.13", title: "Motor Bike Wheel" },
-  { src: "Fig. 14 Abandoned Cart Wheel.jpeg",      fig: "Fig.14", title: "Abandoned Cart Wheel" },
-];
-const IMAGE_FOLDER = "circle images/";
-
-const ring = document.getElementById("ring");
-
-// circle width is 5% of the ring, so centers sit 2.5% in from the edge
-const radius = 50 - 2.5;
-
-for (let i = 0; i < CIRCLE_COUNT; i++) {
-  // start at the top and go clockwise
-  const angle = (i / CIRCLE_COUNT) * 2 * Math.PI - Math.PI / 2;
-
-  const circle = document.createElement("div");
-  circle.className = "circle";
-  circle.style.setProperty("--x", 50 + radius * Math.cos(angle) + "%");
-  circle.style.setProperty("--y", 50 + radius * Math.sin(angle) + "%");
-
-  const image = IMAGES[i];
-  if (image) {
-    circle.classList.add("has-image");
-    circle.style.backgroundImage = `url("${encodeURI(IMAGE_FOLDER + image.src)}")`;
-    circle.dataset.fig = image.fig;
-    circle.dataset.title = image.title;
-  }
-
-  ring.appendChild(circle);
-}
-
-// Split the ring into pie slices, one per circle. When the cursor is inside
-// the ring, the circle whose slice it falls in gets the "active" class.
-const circles = ring.querySelectorAll(".circle");
-const step = (2 * Math.PI) / CIRCLE_COUNT;
-const page = document.querySelector(".page");
-const caption = document.getElementById("caption");
-let active = null;
-let open = null;
-
-function setActive(circle) {
-  if (circle === active) return;
-  if (active) active.classList.remove("active");
-  if (circle) circle.classList.add("active");
-  active = circle;
-  updateCaption();
-}
-
-// Swap CIRCLES for the hovered photo's caption (not while a circle is open).
-function updateCaption() {
-  const show = active && active.dataset.title && !open;
-  if (show) {
-    caption.querySelector(".fig").textContent = active.dataset.fig;
-    caption.querySelector(".title").textContent = active.dataset.title;
-  }
-  page.classList.toggle("is-captioned", !!show);
-}
-
-// Which circle's slice is the cursor in? Returns null outside the ring.
-function circleAt(e) {
-  const rect = ring.getBoundingClientRect();
-  const dx = e.clientX - (rect.left + rect.width / 2);
-  const dy = e.clientY - (rect.top + rect.height / 2);
-
-  if (Math.hypot(dx, dy) > rect.width / 2) return null;
-
-  // angle measured clockwise from the top, matching how the circles are placed
-  let angle = Math.atan2(dy, dx) + Math.PI / 2;
-  if (angle < 0) angle += 2 * Math.PI;
-
-  return circles[Math.round(angle / step) % CIRCLE_COUNT];
-}
-
-document.addEventListener("mousemove", (e) => setActive(circleAt(e)));
-document.addEventListener("mouseleave", () => setActive(null));
-
-// Clicking a slice moves its circle to the middle and enlarges it.
-// Clicking the open circle, outside the ring, or pressing Escape puts it back.
-function setOpen(circle) {
-  if (open) open.classList.remove("open");
-  if (circle) circle.classList.add("open");
-  page.classList.toggle("is-open", !!circle);
-  open = circle;
-  updateCaption();
-}
-
-document.addEventListener("click", (e) => {
-  // let the nav links work as normal
-  if (e.target.closest?.("a")) return;
-
-  if (open && e.target === open) {
-    setOpen(null);
-    return;
-  }
-
-  const circle = circleAt(e);
-  setOpen(circle === open ? null : circle);
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") setOpen(null);
-});
-</script>
 </body>
 </html>

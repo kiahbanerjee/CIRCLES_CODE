@@ -43,6 +43,8 @@
 :root {
   --pad: 20px;              
   --circle-opacity: 0.2;
+  --photo-opacity: 0.4;
+  --step: 7.2deg;           /* 360deg ÷ 50 circles */
   --faded-opacity: 0.4;
   --open-size: 84%;        
   --move: 0.6s;            
@@ -87,44 +89,102 @@ body {
   aspect-ratio: 1 / 1;
 }
 
-.circle {
+/* each slice covers the whole ring and is rotated into place */
+.slice {
+  --angle: calc(var(--i) * var(--step));
   position: absolute;
-  left: var(--x);
-  top: var(--y);
+  inset: 0;
+  transform: rotate(var(--angle));
+  outline: none;            /* no focus box around the rotated slice */
+  color: inherit;
+  text-decoration: none;
+  pointer-events: none;
+}
+
+/* invisible pie-slice hover area, from the centre out to this slice's circle */
+.hit {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 50%, 46.85% 0, 53.15% 0);
+  pointer-events: auto;
+}
+
+/* the small circle, at the top of its slice (turned back upright so photos aren't rotated) */
+.dot {
+  position: absolute;
+  left: 50%;
+  top: 2.5%;
   width: 5%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  transform: translate(-50%, -50%);
-  overflow: hidden;
-  background-color: #000;
-  background-size: cover;
-  background-position: center;
+  transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1));
+  background: var(--img, none) center / cover #000;
   opacity: var(--circle-opacity);
+  pointer-events: none;
   transition:
     opacity var(--fade, 0.2s) ease-out,
-    left var(--move) var(--ease),
     top var(--move) var(--ease),
     width var(--move) var(--ease);
 }
 
-.circle.has-image {
-  background-color: transparent;
+a.slice .dot {
   filter: grayscale(1);
-  opacity: 0.4;
+  opacity: var(--photo-opacity);
 }
 
-.circle.active {
+.slice:hover .dot {
   opacity: 1;
   --fade: 0.15s;
 }
 
-.circle.open {
-  left: 50%;
+/* open: the clicked photo moves to the middle and grows */
+.slice:target {
+  z-index: 2;
+}
+
+.slice:target .hit {
+  pointer-events: none;
+}
+
+.slice:target .dot {
   top: 50%;
   width: var(--open-size);
   opacity: 1;
+}
+
+/* clicking anywhere while a photo is open closes it */
+.close {
+  display: none;
+  position: fixed;
+  inset: 0;
   z-index: 1;
-  cursor: pointer;
+}
+
+.page:has(.slice:target) .close {
+  display: block;
+}
+
+/* caption: replaces CIRCLES while a photo is hovered */
+
+.caption {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1));
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 300;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+
+.caption .fig {
+  margin-right: 0.6em;
+}
+
+.slice:hover .caption {
+  opacity: 1;
 }
 
 /* nav */
@@ -132,6 +192,7 @@ body {
 .nav {
   position: absolute;
   inset: 0;
+  z-index: 3;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -149,11 +210,12 @@ body {
 }
 
 .nav a:nth-child(1) { justify-self: start; }
-.nav a:nth-child(2) {
+.nav a:nth-child(3) { justify-self: end; }
+
+.nav .home {
   font-weight: 500;
   padding-left: 0.05em;
 }
-.nav a:nth-child(3) { justify-self: end; }
 
 .nav a.faded {
   opacity: var(--faded-opacity);
@@ -163,36 +225,8 @@ body {
   opacity: 1;
 }
 
-.page.is-open .nav a:nth-child(2) {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* caption: replaces CIRCLES while a photo is hovered */
-
-.caption {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 16px;
-  font-style: italic;
-  font-weight: 300;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease-out;
-}
-
-.caption .fig {
-  margin-right: 0.6em;
-}
-
-.page.is-captioned .caption {
-  opacity: 1;
-}
-
-.page.is-captioned .nav a:nth-child(2) {
+/* hide CIRCLES while a caption is showing or a photo is open */
+.page:has(a.slice:hover, .slice:target) .home {
   opacity: 0;
   pointer-events: none;
 }
