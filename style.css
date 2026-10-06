@@ -118,7 +118,7 @@ body {
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1));
-  background: var(--img, none) center / cover #000;
+  background: var(--img, none) var(--pos, center) / var(--zoom, cover) #000;  /* --zoom crops in closer, --pos moves the photo (set per photo in index.html) */
   opacity: var(--circle-opacity);
   pointer-events: none;
   transition:
