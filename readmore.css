@@ -40,10 +40,21 @@
   font-display: swap;
 }
 
+:root {
+  --pad: 20px;              /* same edge spacing as the image index page */
+  --faded-opacity: 0.4;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html,
 body {
-  height: 100%;
-  /* split screen: white on the left, black on the right (runs edge to edge, under the padding) */
+  min-height: 100%;
+  /* split screen: white on the left, black on the right */
   background: linear-gradient(to right, #fff 50%, #000 50%);
   /* stop the pull/bounce at the top and bottom, which shows white behind the black half */
   overscroll-behavior: none;
@@ -55,37 +66,128 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-:root {
-  --pad: 20px;              /* equal space around the page on all sides */
-  --faded-opacity: 0.4;
+/* ---------- two columns ---------- */
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* room on the outer edge for the nav labels, which sit in the middle of each side */
+.side {
+  padding: 22vh 70px 22vh 170px;
 }
 
-body {
-  padding: var(--pad);
+.symbolic {
+  padding: 22vh 170px 22vh 70px;
+  color: #fff;
 }
 
-.page {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.inner {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* ---------- text ---------- */
+
+.side-title h1 {
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1em;
+}
+
+.side-title p {
+  font-style: italic;
+  font-weight: 300;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 9em 0 3em;
+}
+
+h3 {
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 300;
+  margin-bottom: 1em;
+}
+
+article {
+  margin-bottom: 6em;
+}
+
+p,
+blockquote {
+  font-size: 16px;
+  line-height: 1.55;
+  margin-bottom: 1em;
+}
+
+blockquote {
+  font-style: italic;
+  font-weight: 300;
+  margin: 1.5em 0;
+}
+
+blockquote cite {
+  display: block;
+  margin-top: 0.5em;
+  font-style: normal;
+}
+
+/* ---------- opposite scroll ----------
+   The page scrolls the white side normally. The black side stays pinned to the screen
+   and its text slides the other way, driven by the page's scroll position (CSS only).
+   It starts showing its bottom (the SYMBOLIC title) and ends showing its top. */
+
+@supports (animation-timeline: scroll()) {
+  .symbolic {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .symbolic .inner {
+    padding: 22vh 0;
+    animation: opposite-scroll linear both;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes opposite-scroll {
+    from { transform: translateY(calc(-100% + 100vh)); }
+    to   { transform: translateY(0); }
+  }
+}
+
+/* browsers without scroll-linked animation (e.g. Firefox): both sides scroll normally,
+   so flip the black side back into reading order */
+@supports not (animation-timeline: scroll()) {
+  .symbolic .inner {
+    display: flex;
+    flex-direction: column-reverse;
+  }
 }
 
 /* ---------- nav ---------- */
 
-/* same position as on the image index page: vertically centered, pinned to the sides */
+/* same spot as on the image index page: vertically centered, pinned to the sides */
 .nav {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  inset: 0 var(--pad);
   display: flex;
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
+  z-index: 1;
 }
 
 .nav a {
@@ -109,4 +211,44 @@ body {
 
 .nav a:hover {
   opacity: 1;
+}
+
+/* ---------- phones: stack the two sides, normal scrolling ---------- */
+
+@media (max-width: 700px) {
+  html,
+  body {
+    background: #fff;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .side,
+  .symbolic {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding: 80px 24px;
+  }
+
+  .symbolic {
+    background: #000;
+  }
+
+  /* the black side is written bottom-to-top, so flip it back for normal reading */
+  .symbolic .inner {
+    display: flex;
+    flex-direction: column-reverse;
+    animation: none;
+    transform: none;
+    padding: 0;
+  }
+
+  .nav {
+    position: static;
+    padding: var(--pad);
+    background: #fff;
+  }
 }
