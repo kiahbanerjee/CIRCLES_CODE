@@ -43,6 +43,7 @@
 :root {
   --pad: 20px;              /* same edge spacing as the image index page */
   --faded-opacity: 0.4;
+  --edge: 60px;             /* space above and below the text on both sides */
 }
 
 * {
@@ -75,17 +76,23 @@ body {
 
 /* room on the outer edge for the nav labels, which sit in the middle of each side */
 .side {
-  padding: 22vh 70px 22vh 170px;
+  padding: var(--edge) 70px var(--edge) 170px;
 }
 
 .symbolic {
-  padding: 22vh 170px 22vh 70px;
+  padding: var(--edge) 170px var(--edge) 70px;
   color: #fff;
 }
 
 .inner {
   max-width: 440px;
   margin: 0 auto;
+}
+
+/* no extra gap after the last thing on each side */
+.inner > :last-child,
+.inner > :last-child > :last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- text ---------- */
@@ -141,10 +148,52 @@ blockquote cite {
   font-style: normal;
 }
 
-/* ---------- opposite scroll ----------
-   The page scrolls the white side normally. The black side stays pinned to the screen
-   and its text slides the other way, driven by the page's scroll position (CSS only).
-   It starts showing its bottom (the SYMBOLIC title) and ends showing its top. */
+/* ---------- photos ----------
+   Round photos with the caption underneath, like the book.
+   Each one uses the same --img / --zoom / --pos as its circle on the image index page. */
+
+figure {
+  width: calc(50% - 1em);   /* every photo the same size: half the column, like the pairs */
+  margin: 4em auto;
+  text-align: center;
+}
+
+figure .photo {
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: var(--img) var(--pos, center) / var(--zoom, cover) #000;
+  filter: grayscale(1);
+}
+
+figcaption {
+  margin-top: 1em;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 300;
+}
+
+figcaption .num {
+  margin-right: 0.6em;
+}
+
+/* two photos side by side (the book's image spreads) */
+.figs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em 2em;
+  margin: 4em 0;
+}
+
+.figs figure {
+  width: 100%;
+  margin: 0;
+}
+
+/* ---------- scrolling ----------
+   Both sides are laid out top to bottom. The white side scrolls up like a normal page;
+   the black side is pinned and moves the opposite way (down), driven by the page scroll (CSS only).
+   So the black side starts at its end and reaches SYMBOLIC at the bottom of the page. */
 
 @supports (animation-timeline: scroll()) {
   .symbolic {
@@ -157,23 +206,14 @@ blockquote cite {
   }
 
   .symbolic .inner {
-    padding: 22vh 0;
-    animation: opposite-scroll linear both;
+    padding: var(--edge) 0;
+    animation: side-scroll linear both;
     animation-timeline: scroll(root);
   }
 
-  @keyframes opposite-scroll {
+  @keyframes side-scroll {
     from { transform: translateY(calc(-100% + 100vh)); }
     to   { transform: translateY(0); }
-  }
-}
-
-/* browsers without scroll-linked animation (e.g. Firefox): both sides scroll normally,
-   so flip the black side back into reading order */
-@supports not (animation-timeline: scroll()) {
-  .symbolic .inner {
-    display: flex;
-    flex-direction: column-reverse;
   }
 }
 
@@ -237,10 +277,7 @@ blockquote cite {
     background: #000;
   }
 
-  /* the black side is written bottom-to-top, so flip it back for normal reading */
   .symbolic .inner {
-    display: flex;
-    flex-direction: column-reverse;
     animation: none;
     transform: none;
     padding: 0;
