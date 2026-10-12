@@ -134,6 +134,9 @@ blockquote {
   font-size: 16px;
   line-height: 1.55;
   margin-bottom: 1em;
+  /* justified, like the book */
+  text-align: justify;
+  hyphens: auto;
 }
 
 blockquote {
@@ -146,6 +149,69 @@ blockquote cite {
   display: block;
   margin-top: 0.5em;
   font-style: normal;
+}
+
+/* ---------- the carved circle (see readmore.js) ----------
+   Each text block holds its own floats, so the circle only reshapes the text, never the photos. */
+
+html {
+  overflow-anchor: none;    /* the text reflows while scrolling; don't let the browser jump to compensate */
+}
+
+.inner,
+.carve {
+  display: flow-root;
+}
+
+.carve-gap,
+.carve-circle {
+  display: none;
+}
+
+.functional .carve-gap   { float: right; width: 0; }
+.functional .carve-circle { float: right; clear: right; }
+.symbolic .carve-gap     { float: left; width: 0; }
+.symbolic .carve-circle  { float: left; clear: left; }
+
+/* chapter names sit in the middle of the circle, either side of the center line, like the book's spine */
+.chapters {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chapter {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: opacity 0.2s ease;
+}
+
+/* fades out while a photo passes behind it (see readmore.js) */
+.chapter.hidden {
+  opacity: 0;
+}
+
+/* each name only as wide as its text, so it's easy to tell when a photo is behind it */
+.chapter:first-child {
+  justify-self: end;
+}
+
+.chapter:last-child {
+  justify-self: start;
+  color: #fff;
+}
+
+/* the headings stay in the text as spacers between chapters; their names show in the circle instead */
+.side h2 {
+  visibility: hidden;
 }
 
 /* ---------- photos ----------
@@ -240,7 +306,7 @@ figcaption .num {
   transition: opacity 0.3s ease;
 }
 
-/* READ MORE sits on the black half */
+/* THE TEXT sits on the black half */
 .nav a.on-dark {
   color: #fff;
 }
@@ -281,6 +347,14 @@ figcaption .num {
     animation: none;
     transform: none;
     padding: 0;
+  }
+
+  .chapters {
+    display: none;
+  }
+
+  .side h2 {
+    visibility: visible;
   }
 
   .nav {

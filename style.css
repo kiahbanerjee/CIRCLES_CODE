@@ -87,6 +87,19 @@ body {
   position: relative;
   width: min(100%, calc(100vh - 2 * var(--pad)));
   aspect-ratio: 1 / 1;
+  transform: rotate(var(--spin, 0deg));   /* turned by dragging (index.js) */
+}
+
+/* grab anywhere to spin the ring */
+html {
+  cursor: grab;
+  touch-action: none;
+}
+
+.spinning,
+.spinning * {
+  cursor: grabbing !important;
+  user-select: none;
 }
 
 /* each slice covers the whole ring and is rotated into place */
@@ -117,7 +130,7 @@ body {
   width: 5%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1));
+  transform: translate(-50%, -50%) rotate(calc((var(--angle) + var(--spin, 0deg)) * -1));
   background: var(--img, none) var(--pos, center) / var(--zoom, cover) #000;  /* --zoom crops in closer, --pos moves the photo (set per photo in index.html) */
   opacity: var(--circle-opacity);
   pointer-events: none;
@@ -170,7 +183,7 @@ a.slice .dot {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1));
+  transform: translate(-50%, -50%) rotate(calc((var(--angle) + var(--spin, 0deg)) * -1));
   font-size: 16px;
   font-style: italic;
   font-weight: 300;
